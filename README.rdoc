@@ -1,0 +1,104 @@
+= scheduler
+
+== DESCRIPTION:
+
+An application for determining the best time to conduct meetings.
+
+Adapted from
+
+* github.com/vertiginous/rmu-scheduler
+
+
+== SYNOPSIS:
+
+==== Basic usage
+
+    schedule = Scheduler::Event.new do 
+    
+      week_of       Date.civil(2010,11,21)
+      duration      90
+
+    end
+    
+    schedule.participants << 
+      Scheduler::Participant.new('Malcolm Reynolds').available do
+        on(:monday,    :from => "15:00", :to => "18:00" )
+        on(:wednesday, :from => "20:00", :to => "23:00" )
+        on(:friday,    :from => "16:00", :to => "19:00" )
+      end
+
+    schedule.participants <<
+      Scheduler::Participant.new('Hoban Washburne').available do
+        on(:monday,    :from => "15:00", :to => "18:00" )
+        on(:wednesday, :from => "20:00", :to => "23:00" )
+        on(:thursday,  :from => "15:00", :to => "18:30" )
+      end
+
+    schedule.participants <<
+      Scheduler::Participant.new('Jayne Cobb').available do
+        weekdays(:from => "15:00", :to => "18:00" )
+      end
+
+    schedule.participants <<
+      Scheduler::Participant.new('Zoe Washburne').available do
+        on(:monday, :tuesday, :thursday, :from => "15:00", :to => "18:00" )
+      end
+
+    schedule.participants <<
+      Scheduler::Participant.new('Inara Serra').available do
+        on(:monday, :tuesday, :thursday )
+      end
+       
+    puts schedule.all
+
+==== Output
+
+    Monday 15:00-18:00 +00:00
+      Hoban Washburne
+      Inara Serra
+      Jayne Cobb
+      Malcolm Reynolds
+      Zoe Washburne
+    Thursday 15:00-18:00 +00:00
+      Hoban Washburne
+      Inara Serra
+      Jayne Cobb
+      Zoe Washburne
+    Tuesday 15:00-18:00 +00:00
+      Inara Serra
+      Jayne Cobb
+      Zoe Washburne
+
+    
+== REQUIREMENTS:
+
+* {tempr}[https://github.com/ericgj/tempr]
+
+== INSTALL:
+
+* git clone 
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2010 Eric Gjertsen, Gordon Thiesfeld
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

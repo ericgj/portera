@@ -1,0 +1,84 @@
+DSL quasi-similar to the old one:
+
+Scheduler::Event.new do
+
+  duration 90
+  week_of 2012, 2, 1
+
+  participant('Eric') do |available|
+    available.on_days_of_week(2,3,5).between_times("15:00 UTC", "18:00 UTC")
+  end
+end
+
+-----
+
+But you have to ask how useful this is. No one's going to type that.
+And you're going to have data coming in at different times.
+So this DSL is not really practical.
+
+What you want is to start with something simple to correspond to discrete commands, such as:
+
+   event = Scheduler::Event.new( :name => "event name", :duration => 90, :week_of => [2012,2,1])
+
+add participant with initial availability
+   event = Scheduler.events["event name"]
+   event.participants << Participant.new("Eric") {|schedule| ... }
+
+reset schedule
+   event = Scheduler.events["event name"]
+   participant = event.participants["Eric"]
+   participant.clear
+   participant.available {|schedule| ... }
+  
+add to availability
+   event = Scheduler.events["event name"]
+   event.participants["Eric"].available {|schedule| ... }
+
+best attendance
+   event = Scheduler.events["event name"]
+   event.best_attendance
+
+-----
+A sidebar about persistence
+
+SubRangeIterators can't be serialized, which makes persistence kind of tricky.
+
+I'm imagining a kind of wrapper class that allows conversion of parameters into SubRangeIterator chains. So you can persist the wrapper with its data instead of dealing with the lambdas directly.
+
+-----
+
+
+Participants have an array of SubrangeIterators, all with the same base range
+Then it's a matter of 
+
+   event.range.each_minutes(15,0,event.duration).each_with_object({}) do |range, hash|
+      hash[range.begin] = event.participants.select {|p| p.availability.any? {|slot| range.within?(slot) } }
+   end
+
+   
+-----
+
+## Proposed messaging for email interface
+
+Note I'm proposing YAML messages for the body.
+
+Command               To                     Subject           Body
+----------------------------------------------------------------------------------------------------
+Create                c+{event}.schedule     /^([^\+\?\-].+)/  duration: 90
+                                                               week_of:  2012-01-02
+                                                               
+List all              c+{event}.schedule     ?all              <ignored>
+
+List current best     c+{event}.schedule     ?best             <ignored>
+
+List availability     c+{event}.schedule     ?<email>          <ignored>
+of single participant
+
+Add availability      c+{event}.schedule     +available        - 
+                                                                 days: [:monday, :wednesday, :friday]
+                                                                 range:   ["15:00 UTC", "18:00 UTC"]
+                                                               - 
+                                                                 at:   "Tue 3 Jan 4:30pm EST 2012"
+                                                                 
+Reset availability    c+{event}.schedule     -available        <ignored>
+
