@@ -16,6 +16,12 @@ module Scheduler
       end
     end
     
+    def to_s
+      [self.name  ? "#{self.name}"    : nil,
+       self.email ? "<#{self.email}>" : nil
+      ].compact.join(" ")
+    end
+    
     class Builder
       
       def initialize(collect)

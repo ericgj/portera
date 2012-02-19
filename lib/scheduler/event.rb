@@ -24,18 +24,22 @@ module Scheduler
       end
     end
     
-    def best(params={})
-      limit = params.delete(:limit)
+    def best(params={}, &selector)
       list = availability(params).sort do |a, b|
-        b[1].count <=> a[1].count
+        comp = b[1].count <=> a[1].count
+        comp.zero? ? (a[0].begin <=> b[0].begin) : comp
       end
-      limit ? list[0...limit] : list
+      if block_given?
+        list.select(&selector)
+      else
+        list
+      end
     end
     
     private
     
     def iterate(i)
-      self.range.dup.extend(Tempr::DateTimeRange).each_minute(i,0,i)
+      self.range.dup.extend(Tempr::DateTimeRange).each_minute(i,0,self.duration)
     end
     
     class Builder

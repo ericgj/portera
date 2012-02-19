@@ -48,8 +48,7 @@ describe 'simple schedule' do
   end
   
   it 'should return best' do
-    require 'pp'
-    pp schedule.best
+    puts schedule.best { |(range, people)| people.count > 2 }
   end
   
 end
