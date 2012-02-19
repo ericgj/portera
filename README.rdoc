@@ -49,7 +49,7 @@ Adapted from
         on([:monday, :tuesday, :thursday])
       end
        
-    puts schedule.all
+    puts schedule.best
 
 ==== Output
 
