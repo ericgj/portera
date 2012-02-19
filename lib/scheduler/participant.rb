@@ -1,27 +1,39 @@
 
 module Scheduler
 
+  # Participant model - for use with event(s). See README for usage.
   class Participant < Struct.new(:name, :email)
   
+    # List of availability rules
     def availables; @availables ||= []; end
-              
+    
+    # Define availability rule passing a block, e.g.
+    #
+    #    participant.available do
+    #      weekdays :from => '11:00am', :to => '3:00pm', :utc_offset => '-05:00'
+    #      on [0,6] :from => '5:00pm', :to => '6:30pm', :utc_offset => '-05:00'
+    #    end
     def available(&sched_proc)
       Builder.new(self.availables).instance_eval(&sched_proc)
       self
     end
     
+    # For given event range, 
+    # evaluate if the given timeslot fits within any of the participant's available times
     def available_for?(event, slot)
       availables.any? do |avail|
         avail.for_range(event.range).any? {|free| free.subsume?(slot)}
       end
     end
     
+    # Display participant as valid email `name <address>`
     def to_s
       [self.name  ? "#{self.name}"    : nil,
        self.email ? "<#{self.email}>" : nil
       ].compact.join(" ")
     end
     
+    # Internal builder for participant availability
     class Builder
       
       def initialize(collect)

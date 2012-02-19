@@ -49,7 +49,7 @@ Adapted from
         on([:monday, :tuesday, :thursday])
       end
        
-    puts schedule.best
+    puts Scheduler.view(schedule, :simple).best
 
 ==== Output
 
