@@ -11,17 +11,17 @@ describe 'simple schedule' do
     
   let(:malcolm) do
     Scheduler::Participant.new('Malcolm Reynolds').available do
-      on(1,    :from => "15:00", :to => "18:00" )
-      on(3,    :from => "20:00", :to => "23:00" )
-      on(5,    :from => "16:00", :to => "19:00" )
+      on(:Mon,    :from => "15:00", :to => "18:00" )
+      on(:Wed,    :from => "20:00", :to => "23:00" )
+      on(:Fri,    :from => "16:00", :to => "19:00" )
     end
   end
   
   let(:hoban) do
     Scheduler::Participant.new('Hoban Washburne').available do
-      on(1,    :from => "15:00", :to => "18:00" )
-      on(3,    :from => "20:00", :to => "23:00" )
-      on(4,    :from => "15:00", :to => "18:30" )
+      on(:monday,    :from => "15:00", :to => "18:00" )
+      on(:wednesday, :from => "20:00", :to => "23:00" )
+      on(:thursday,  :from => "15:00", :to => "18:30" )
     end
   end
   
@@ -39,7 +39,7 @@ describe 'simple schedule' do
   
   let(:inara) do
     Scheduler::Participant.new('Inara Serra').available do
-      on([1, 2, 4])
+      on([:Monday, :tue, :Thu])
     end
   end
   

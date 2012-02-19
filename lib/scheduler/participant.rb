@@ -9,12 +9,12 @@ module Scheduler
     
     # Define availability rule passing a block, e.g.
     #
-    #    participant.available do
-    #      weekdays :from => '11:00am', :to => '3:00pm', :utc_offset => '-05:00'
-    #      on [0,6] :from => '5:00pm', :to => '6:30pm', :utc_offset => '-05:00'
+    #    participant.available('+09:00') do
+    #      weekdays :from => '11:00am', :to => '3:00pm'
+    #      on [0,6] :from => '5:00pm', :to => '6:30pm'
     #    end
-    def available(&sched_proc)
-      Builder.new(self.availables).instance_eval(&sched_proc)
+    def available(utc_offset=nil, &sched_proc)
+      Builder.new(self.availables,utc_offset).instance_eval(&sched_proc)
       self
     end
     
@@ -36,19 +36,52 @@ module Scheduler
     # Internal builder for participant availability
     class Builder
       
-      def initialize(collect)
+      Days = { :sunday => 0,
+               :monday => 1,
+               :tuesday => 2,
+               :wednesday => 3,
+               :thursday => 4,
+               :friday => 5,
+               :saturday => 6,
+               :sun => 0,
+               :mon => 1,
+               :tue => 2,
+               :wed => 3,
+               :thu => 4,
+               :fri => 5,
+               :sat => 6,
+               :Sunday => 0,
+               :Monday => 1,
+               :Tuesday => 2,
+               :Wednesday => 3,
+               :Thursday => 4,
+               :Friday => 5,
+               :Saturday => 6,
+               :Sun => 0,
+               :Mon => 1,
+               :Tue => 2,
+               :Wed => 3,
+               :Thu => 4,
+               :Fri => 5,
+               :Sat => 6               
+             }
+             
+      def initialize(collect,utc_offset=nil)
         @collect = collect
+        @utc_offset = utc_offset || 0
       end
       
       # Example:
       #   on [2,3,5], :from => '9:00am', :to => '9:30am', :utc_offset => '-05:00'
       #
-      # Note that time is assumed to be **UTC** if not specified, _not the local offset_!
+      # Note that if not specified, timezone is 
+      # 1. the offset passed into the constructor, or
+      # 2. UTC, otherwise -- _not the process-local timezone_!
       def on(days, time={})
-        @collect << Availability.new( Array(days), 
+        @collect << Availability.new( Array(days).map {|d| to_weekday(d)}, 
                                       time[:from], 
                                       time[:to], 
-                                      time[:utc_offset] || 0
+                                      time[:utc_offset] || @utc_offset
                                     )
       end
       
@@ -60,6 +93,12 @@ module Scheduler
       # sugar for `on( [], time)`
       def any_day(time={})
         on( [], time)
+      end
+      
+      private
+
+      def to_weekday(day)
+        Days[day] || day
       end
       
     end
