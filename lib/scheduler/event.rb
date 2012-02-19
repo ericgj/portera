@@ -24,15 +24,10 @@ module Scheduler
       end
     end
     
-    def best(params={}, &selector)
+    def best(params={})
       list = availability(params).sort do |a, b|
         comp = b[1].count <=> a[1].count
         comp.zero? ? (a[0].begin <=> b[0].begin) : comp
-      end
-      if block_given?
-        list.select(&selector)
-      else
-        list
       end
     end
     
