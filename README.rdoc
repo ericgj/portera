@@ -41,12 +41,12 @@ Adapted from
 
     schedule.participants <<
       Scheduler::Participant.new('Zoe Washburne').available do
-        on(:monday, :tuesday, :thursday, :from => "15:00", :to => "18:00" )
+        on([:monday, :tuesday, :thursday], :from => "15:00", :to => "18:00" )
       end
 
     schedule.participants <<
       Scheduler::Participant.new('Inara Serra').available do
-        on(:monday, :tuesday, :thursday )
+        on([:monday, :tuesday, :thursday])
       end
        
     puts schedule.all
