@@ -47,8 +47,14 @@ describe 'simple schedule' do
     schedule.participants << malcolm << hoban << jayne << zoe << inara
   end
   
-  it 'should return best' do
-    puts schedule.best { |(range, people)| people.count > 2 }
+  it 'should return best timeslots' do
+    puts
+    puts schedule.availability.best
+  end
+  
+  it 'should return best with coalesced timeslots' do
+    puts
+    puts schedule.coalesced.best
   end
   
 end

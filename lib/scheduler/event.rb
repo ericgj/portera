@@ -1,3 +1,5 @@
+require 'set'
+
 module Scheduler
 
   # Event model - see README for usage
@@ -23,7 +25,7 @@ module Scheduler
     def availability(params={})
       interval = params.fetch(:interval,15)
       keep_all = params.fetch(:all,false)
-      iterate(interval).each_with_object([]) do |slot, accum|
+      iterate(interval).each_with_object(TimeslotEnum.new) do |slot, accum|
         avails = []
         self.participants.each do |person|
           if person.available_for?(self, slot)
@@ -31,19 +33,13 @@ module Scheduler
           end
         end
         if !avails.empty? || keep_all
-          accum << [ slot, avails.sort_by(&:name) ]
+          accum << Timeslot.new(slot, ::Set.new(avails.sort_by(&:name)))
         end
       end
     end
     
-    # sort timeslot availability by 
-    # 1. most participants available
-    # 2. timeslot date/time
-    def best(params={})
-      list = availability(params).sort do |a, b|
-        comp = b[1].count <=> a[1].count
-        comp.zero? ? (a[0].begin <=> b[0].begin) : comp
-      end
+    def coalesced(params={})
+      availability(params).coalesced
     end
     
     private
@@ -79,4 +75,70 @@ module Scheduler
 
   end
   
+  class Timeslot < Struct.new(:range, :participants)
+  
+    # temporary, TODO use views/presenters instead
+    def to_s
+      ["#{self.range}",
+       self.participants.empty? ? nil : " #{self.participants.to_a.join("\n ")}"
+      ].compact.join("\n")
+    end
+    
+  end
+  
+  class TimeslotEnum
+    include Enumerable
+    
+    def <<(timeslot)
+      timeslots << timeslot
+      self
+    end
+    
+    def each(&b)
+      timeslots.each(&b)
+    end
+        
+    # join intersecting timeslots with identical participants
+    # note that this returns a new TimeslotEnum, so that you can call
+    #  [+enum.best+]            all timeslots sorted by highest participation
+    #  [+enum.coalesced.best+]  joined timeslots sorted by highest participation
+    #
+    # TODO could use some refactoring
+    # also the condition should be `rng.intersects?(last_rng) || rng.adjacent?(last_rng)`
+    def coalesced
+      accum = self.class.new
+      inject(nil) do |last_slot, this_slot|
+        if last_slot
+          rng      = this_slot.range.dup.extend(Tempr::DateTimeRange)
+          last_rng = last_slot.range
+          if (rng.intersects?(last_rng)) &&
+             (this_slot.participants ==  last_slot.participants)
+            Timeslot.new(last_rng.begin...rng.end, 
+                         this_slot.participants)
+          else
+            accum << last_slot
+            this_slot
+          end
+        else
+          this_slot
+        end
+      end
+      accum
+    end
+
+    # sort timeslot availability by 
+    # 1. most participants available
+    # 2. timeslot date/time
+    def best
+      sort do |a, b|
+        comp = b.participants.count <=> a.participants.count
+        comp.zero? ? (a.range.begin <=> b.range.begin) : comp
+      end
+    end
+    
+    private
+    def timeslots; @timeslots ||= []; end
+    
+  end
+    
 end
