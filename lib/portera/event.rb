@@ -1,6 +1,6 @@
 require 'set'
 
-module Scheduler
+module Portera
 
   # Event model - see README for usage
   class Event

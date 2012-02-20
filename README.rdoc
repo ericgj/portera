@@ -1,4 +1,4 @@
-= scheduler
+= portera
 
 == DESCRIPTION:
 
@@ -13,7 +13,7 @@ Adapted from
 
 ==== Basic usage
 
-    schedule = Scheduler::Event.new do 
+    schedule = Portera::Event.new do 
     
       week_of       Date.civil(2010,11,21)
       duration      90
@@ -21,35 +21,35 @@ Adapted from
     end
     
     schedule.participants << 
-      Scheduler::Participant.new('Malcolm Reynolds').available do
+      Portera::Participant.new('Malcolm Reynolds').available do
         on(:monday,    :from => "15:00", :to => "18:00" )
         on(:wednesday, :from => "20:00", :to => "23:00" )
         on(:friday,    :from => "16:00", :to => "19:00" )
       end
 
     schedule.participants <<
-      Scheduler::Participant.new('Hoban Washburne').available do
+      Portera::Participant.new('Hoban Washburne').available do
         on(:monday,    :from => "15:00", :to => "18:00" )
         on(:wednesday, :from => "20:00", :to => "23:00" )
         on(:thursday,  :from => "15:00", :to => "18:30" )
       end
 
     schedule.participants <<
-      Scheduler::Participant.new('Jayne Cobb').available do
+      Portera::Participant.new('Jayne Cobb').available do
         weekdays(:from => "15:00", :to => "18:00" )
       end
 
     schedule.participants <<
-      Scheduler::Participant.new('Zoe Washburne').available do
+      Portera::Participant.new('Zoe Washburne').available do
         on([:monday, :tuesday, :thursday], :from => "15:00", :to => "18:00" )
       end
 
     schedule.participants <<
-      Scheduler::Participant.new('Inara Serra').available do
+      Portera::Participant.new('Inara Serra').available do
         on([:monday, :tuesday, :thursday])
       end
        
-    puts Scheduler.view(schedule, :simple).best
+    puts Portera.view(schedule, :simple).best
 
 ==== Output
 

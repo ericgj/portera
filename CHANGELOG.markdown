@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1 / 2012-02-20
+
+- Re-release under Portera top-level namespace
+
 ## 0.1.0 / 2012-02-20
 
 - Initial release

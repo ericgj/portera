@@ -1,8 +1,8 @@
 require 'tempr'
 
-%w[ scheduler/version
-    scheduler/event
-    scheduler/participant
+%w[ portera/version
+    portera/event
+    portera/participant
   ].each do |f|
       require File.expand_path(f, File.dirname(__FILE__))
     end

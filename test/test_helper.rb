@@ -1,4 +1,4 @@
-require File.expand_path('../lib/scheduler', File.dirname(__FILE__))
+require File.expand_path('../lib/portera', File.dirname(__FILE__))
 
 gem 'minitest'
 require 'minitest/spec'

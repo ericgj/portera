@@ -1,5 +1,5 @@
 
-module Scheduler
+module Portera
 
   # Participant model - for use with event(s). See README for usage.
   class Participant < Struct.new(:name, :email)
