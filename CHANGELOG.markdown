@@ -4,3 +4,4 @@
 
 - Initial release
 - Note coalescing timeslot ranges does not quite work
+- Note `Schedule.view` has not been implemented yet
