@@ -4,7 +4,7 @@
 
 An application for determining the best time to conduct meetings.
 
-Adapted from
+Adapted from Gordon Thiesfeld's rmu-scheduler:
 
 * github.com/vertiginous/rmu-scheduler
 
@@ -82,7 +82,7 @@ Adapted from
 
 (The MIT License)
 
-Copyright (c) 2010 Eric Gjertsen, Gordon Thiesfeld
+Copyright (c) 2012 Eric Gjertsen
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
