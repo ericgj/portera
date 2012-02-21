@@ -4,9 +4,7 @@
 
 An application for determining the best time to conduct meetings.
 
-Adapted from Gordon Thiesfeld's rmu-scheduler:
-
-* github.com/vertiginous/rmu-scheduler
+Adapted from Gordon Thiesfeld's {rmu-scheduler}[https://github.com/vertiginous/rmu-scheduler]
 
 
 == SYNOPSIS:
