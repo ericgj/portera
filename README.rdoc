@@ -74,6 +74,7 @@ Adapted from Gordon Thiesfeld's rmu-scheduler:
 
 * {tempr}[https://github.com/ericgj/tempr]
 * {tilt}[https://github.com/rtomayko/tilt]
+* {erubis}[http://www.kuwata-lab.com/erubis/]
 
 == INSTALL:
 

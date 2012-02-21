@@ -1,3 +1,4 @@
+require 'erubis'
 require 'tilt'
 
 module Portera
@@ -8,10 +9,11 @@ module Portera
     class Simple
       include Enumerable
       
-      VIEWPATH = File.expand_path('../views', File.dirname(__FILE__))
-      
-      attr_accessor :template
+      attr_accessor :template, :view_path
       def template; @template ||= 'simple'; end
+      def view_path
+        @view_path ||=  File.expand_path('../views', File.dirname(__FILE__))
+      end
       
       def initialize(e)
         self.event = e
@@ -44,7 +46,7 @@ module Portera
       end
       
       def render
-        Tilt.new(Dir.glob(File.join(VIEWPATH, template + '.*')).first)
+        Tilt.new(Dir.glob(File.join(view_path, template + '.*')).first)
           .render(self)
       end
       
