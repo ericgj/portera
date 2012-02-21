@@ -1,0 +1,7 @@
+<%= title %> 
+<% minimum_participants(2).each do |slot, participants| -%>
+<%= slot %>
+  <% participants.each do |p| -%>
+  <%= p %>
+  <% end -%>
+<% end -%>    

@@ -57,4 +57,9 @@ describe 'simple schedule' do
     puts schedule.coalesced.best
   end
   
+  it 'should display simple report' do
+    puts
+    puts Portera::Presenters::Simple.new(schedule).render
+  end
+  
 end
