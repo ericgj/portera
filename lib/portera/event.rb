@@ -105,14 +105,13 @@ module Portera
     #  [+enum.coalesced.best+]  joined timeslots sorted by highest participation
     #
     # TODO could use some refactoring
-    # also the condition should be `rng.intersects?(last_rng) || rng.adjacent?(last_rng)`
     def coalesced
       accum = self.class.new
       inject(nil) do |last_slot, this_slot|
         if last_slot
           rng      = this_slot.range.dup.extend(Tempr::DateTimeRange)
           last_rng = last_slot.range
-          if (rng.intersects?(last_rng)) &&
+          if (rng.intersects?(last_rng) || rng.succeeds?(last_rng)) &&
              (this_slot.participants ==  last_slot.participants)
             Timeslot.new(last_rng.begin...rng.end, 
                          this_slot.participants)
