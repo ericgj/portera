@@ -20,9 +20,14 @@ module Portera
     
     # For given event range, 
     # evaluate if the given timeslot fits within any of the participant's available times
+    #
+    # Note that range-availability arrays are cached here per event
+    # Possibly caching should be moved down into Tempr, e.g.
+    #    avail.for_range(event.range).all   #=> caches within Tempr::SubRangeIterator
     def available_for?(event, slot)
       availables.any? do |avail|
-        avail.for_range(event.range).any? {|free| free.subsume?(slot)}
+        cache[event.range] ||= avail.for_range(event.range).to_a
+        cache[event.range].any? {|free| free.subsume?(slot)}
       end
     end
     
@@ -32,6 +37,10 @@ module Portera
        self.email ? "<#{self.email}>" : nil
       ].compact.join(" ")
     end
+    
+    private
+    
+    def cache; @cache ||= {}; end
     
     # Internal builder for participant availability
     class Builder
