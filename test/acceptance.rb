@@ -3,7 +3,7 @@ require File.expand_path('test_helper',File.dirname(__FILE__))
 describe 'simple schedule' do
 
   let(:schedule) do 
-    schedule = Portera::Event.new do 
+    schedule = Portera::Event.new("Meeting on Frobartz project") do 
       week_of       Date.civil(2010,11,21)
       duration      90
     end

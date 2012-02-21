@@ -4,7 +4,7 @@ module Portera
 
   # Event model - see README for usage
   class Event
-    attr_accessor :duration, :range
+    attr_accessor :name, :duration, :range
     def participants; @participants ||= []; end
     
     # Define events using a block passed to the constructor, e.g.
@@ -13,7 +13,8 @@ module Portera
     #       duration 60
     #       week_of  Date.civil(2012,2,13)
     #     end
-    def initialize(&proc)
+    def initialize(name=nil,&proc)
+      self.name = name
       Builder.new(self).instance_eval(&proc)
     end
     

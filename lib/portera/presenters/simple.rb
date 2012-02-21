@@ -2,6 +2,7 @@ require 'tilt'
 
 module Portera
 
+  #TODO: delegation to event; extract base class
   module Presenters
   
     class Simple
@@ -16,7 +17,11 @@ module Portera
         self.event = e
       end
       
-      def title
+      def name
+        event.name
+      end
+      
+      def description
         present_event(event)
       end
       
@@ -47,7 +52,7 @@ module Portera
       attr_accessor :event
       
       def present_event(e)
-        "Availability #{present_date_range(e.range)} (#{e.duration} mins)"
+         "best times #{present_date_range(e.range)} (#{e.duration} mins)"
       end
       
       def present_date_range(r)
