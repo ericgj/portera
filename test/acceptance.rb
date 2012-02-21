@@ -59,7 +59,7 @@ describe 'simple schedule' do
   
   it 'should display simple report' do
     puts
-    puts Portera::Presenters::Simple.new(schedule).render
+    puts Portera.view(:simple, schedule)
   end
   
 end

@@ -49,7 +49,7 @@ Adapted from Gordon Thiesfeld's rmu-scheduler:
         on([:monday, :tuesday, :thursday])
       end
        
-    puts Portera.view(schedule, :simple).best
+    puts Portera.view(:simple, schedule)
 
 ==== Output
 
