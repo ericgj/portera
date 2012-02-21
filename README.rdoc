@@ -73,6 +73,7 @@ Adapted from Gordon Thiesfeld's rmu-scheduler:
 == REQUIREMENTS:
 
 * {tempr}[https://github.com/ericgj/tempr]
+* {tilt}[https://github.com/rtomayko/tilt]
 
 == INSTALL:
 
