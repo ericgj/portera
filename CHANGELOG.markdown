@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.3 / 2012-02-21
+
+- Draft simple presenter
+
 ## 0.1.2 / 2012-02-21
 
 - Cache availability results in `Participant#available_for?`
