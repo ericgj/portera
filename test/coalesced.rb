@@ -147,5 +147,17 @@ module CoalescedTests
     
   end
 
+  describe "nil case" do
+    before do
+      @subject = Portera::TimeslotEnum.new
+    end
+    
+    it 'should have zero timeslots' do
+      actual = @subject.coalesced
+      assert actual.none?, 
+             "Expected coalesced to return no timeslots; was #{actual.to_a.count}"
+    end
+    
+  end
   
 end
