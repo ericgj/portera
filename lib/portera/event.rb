@@ -104,26 +104,33 @@ module Portera
     #  [+enum.best+]            all timeslots sorted by highest participation
     #  [+enum.coalesced.best+]  joined timeslots sorted by highest participation
     #
+    # Note assumes timeslots are appended in ascending order by range.begin
     # TODO could use some refactoring
     def coalesced
-      accum = self.class.new
-      inject(nil) do |last_slot, this_slot|
+      last_slot = nil
+      coales = inject(self.class.new) do |accum, this_slot|
         if last_slot
-          rng      = this_slot.range.dup.extend(Tempr::DateTimeRange)
-          last_rng = last_slot.range
+          rng       = this_slot.range
+          last_rng  = last_slot.range
           if (rng.intersects?(last_rng) || rng.succeeds?(last_rng)) &&
              (this_slot.participants ==  last_slot.participants)
-            Timeslot.new(last_rng.begin...rng.end, 
-                         this_slot.participants)
+            last_slot = Timeslot.new(
+                          (last_rng.begin...rng.end), 
+                          this_slot.participants
+                        )
           else
             accum << last_slot
-            this_slot
+            last_slot = this_slot
           end
         else
-          this_slot
+          last_slot = this_slot
         end
+        accum
       end
-      accum
+      if last_slot 
+        coales << last_slot
+      end
+      coales
     end
 
     # sort timeslot availability by 
