@@ -59,6 +59,13 @@ module Portera
                :thu => 4,
                :fri => 5,
                :sat => 6,
+               :su  => 0,
+               :m   => 1,
+               :tu  => 2,
+               :w   => 3,
+               :th  => 4,
+               :f   => 5,
+               :sa  => 6,
                :Sunday => 0,
                :Monday => 1,
                :Tuesday => 2,
@@ -72,7 +79,14 @@ module Portera
                :Wed => 3,
                :Thu => 4,
                :Fri => 5,
-               :Sat => 6               
+               :Sat => 6,
+               :Su  => 0,
+               :M   => 1,
+               :Tu  => 2,
+               :W   => 3,
+               :Th  => 4,
+               :F   => 5,
+               :Sa  => 6
              }
              
       def initialize(collect,utc_offset=nil)
@@ -107,7 +121,8 @@ module Portera
       private
 
       def to_weekday(day)
-        Days[day] || day
+        return day if (0..6).include?(day)
+        Days[day] or raise ArgumentError, "Unknown day: #{day}"
       end
       
     end

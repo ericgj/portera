@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4 / 2012-03-11
+
+- Allow M,Tu,W,Th,F,Sa,Su day of week symbols
+- Add input validation for days of week
+
 ## 0.1.3 / 2012-02-21
 
 - Draft simple presenter
